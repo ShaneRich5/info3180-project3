@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	
+	<title>Wishlist</title>
+
+	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+</head>
+<body ng-app="wishlist" layout="column">
+	
+	<md-toolbar layout="row">
+		<h1>Wishlist</h1>
+	</md-toolbar>
+
+	<div flex layout="row">
+		<!-- Container #3 -->
+        <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2">
+        	<md-list>
+				
+        	</md-list>
+        </md-sidenav>
+
+        <!-- Container #4 -->
+        <md-content flex id="content">
+			<input type="text" ng-model="data">
+			<h1>{{ data }}</h1>
+			<section ui-view></section>
+        </md-content>
+	</div>
+
+	<!-- js -->
+	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+	<script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+	<script type="text/javascript" src="/bower_components/angular-aria/angular-aria.js"></script>
+	<script type="text/javascript" src="/bower_components/angular-material/angular-material.js"></script>
+	<script type="text/javascript" src="/js/app.js"></script>
+
+</body>
+</html>

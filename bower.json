@@ -1,0 +1,30 @@
+{
+  "name": "wishlist",
+  "authors": [
+    "shane <shane.richards121@gmail.com>"
+  ],
+  "description": "School project",
+  "main": "run.py",
+  "moduleType": [],
+  "keywords": [
+    "wishlist",
+    "flask",
+    "demo",
+    "angular"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.2",
+    "jquery": "^2.2.2",
+    "angular-ui-router": "^0.2.18"
+  }
+}

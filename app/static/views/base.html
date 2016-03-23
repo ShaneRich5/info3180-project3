@@ -2,15 +2,20 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	
+
 	<title>Wishlist</title>
 
 	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
 </head>
 <body ng-app="wishlist" layout="column">
 	
-	<md-toolbar layout="row">
-		<h1>Wishlist</h1>
+	<!-- <md-toolbar layout="row"> -->
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h1>Wishlist</h1>
+		</div>
+		<md-button ui-sref="login">Login</md-button>
+		<md-button ui-sref="register">Register</md-button>
 	</md-toolbar>
 
 	<div flex layout="row">
@@ -23,8 +28,6 @@
 
         <!-- Container #4 -->
         <md-content flex id="content">
-			<input type="text" ng-model="data">
-			<h1>{{ data }}</h1>
 			<section ui-view></section>
         </md-content>
 	</div>
@@ -36,7 +39,12 @@
 	<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
 	<script type="text/javascript" src="/bower_components/angular-aria/angular-aria.js"></script>
 	<script type="text/javascript" src="/bower_components/angular-material/angular-material.js"></script>
+
 	<script type="text/javascript" src="/js/app.js"></script>
 
+	<script type="text/javascript" src="/js/controllers/HomeCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/LoginCtrl.js"></script>
+	<script type="text/javascript" src="/js/controllers/RegisterCtrl.js"></script>
+	
 </body>
 </html>

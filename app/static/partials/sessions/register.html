@@ -1,0 +1,32 @@
+<md-content layout-padding>
+	<h1>Register</h1>
+	<div>
+		<form name="userForm">
+			<div layout-gt-xs="row">
+				<md-input-container class="md-block" flex-gt-md>
+					<label>First Name</label>
+					<input type="text" ng-model="user.firstName">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-md>
+					<label>Last Name</label>
+					<input type="text" ng-model="user.lastName">
+				</md-input-container>
+			</div>
+			<div layout-gt-sm="row">
+				<md-input-container class="md-block">
+					<label>Email</label>
+					<input type="text" ng-model="user.email">
+				</md-input-container>
+				<md-input-container class="md-block">
+					<label>Password</label>
+					<input type="password" ng-model="user.password">
+				</md-input-container>
+				<md-input-container class="md-block">
+					<label>Confirm Password</label>
+					<input type="password" ng-model="user.passwordConfirm">
+				</md-input-container>
+			</div>
+			<md-button ng-click="createUser(user)">Submit</md-button>
+		</form>
+	</div>
+</md-content>

@@ -4,21 +4,28 @@
 	
 	function initConfig($stateProvider, $urlRouterProvider) {
 
+		$urlRouterProvider.otherwise('');
+
 		$stateProvider
 			.state('home', {
 				url: '/',
-				template: '<h1>Home</h1>'
+				templateUrl: templatePath('pages/home'),
+				controller: 'HomeCtrl'
 			})
 			.state('login', {
 				url: '/login',
-				template: '<h1>Login</h1>'	
+				templateUrl: templatePath('sessions/login'),
+				controller: 'LoginCtrl'
 			})
 			.state('register', {
 				url: '/register',
-				template: '<h1>Register</h1>'
+				templateUrl: templatePath('sessions/register'),
+				controller: 'RegisterCtrl'
 			});
 
-		$urlRouterProvider.otherwise('');
+		function templatePath(path) {
+			return 'partials/' + path + '.html';
+		}
 	}
 
 	angular

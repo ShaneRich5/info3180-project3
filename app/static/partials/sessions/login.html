@@ -1,0 +1,18 @@
+
+<form>
+	<md-input-container>
+		<label>Username</label>
+		<input type="text" ng-model="username" required>
+		<div ng-messages="userForm.username.$error">
+			<div ng-message="required">This is required</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container>
+		<label>Password</label>
+		<input type="password" ng-model="password" required>
+		<div ng-messages="userForm.username.$error">
+			<div ng-message="required">This is required</div>
+		</div>
+	</md-input-container>
+</form>

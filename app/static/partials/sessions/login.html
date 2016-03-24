@@ -1,10 +1,14 @@
 
 <form>
 	<md-input-container>
-		<label>Username</label>
-		<input type="text" ng-model="username" required>
-		<div ng-messages="userForm.username.$error">
-			<div ng-message="required">This is required</div>
+		<label>Email</label>
+		<input type="text" ng-model="user.email" required
+			ng-pattern="/^.+@.+\..+$/" maxlength="100"/>
+		<div class="hint" ng-show="showHints">How can we reach you?</div>
+		<div ng-messages="userForm.email.$error" ng-hide="showHints">
+			<div ng-message-exp="['required', 'maxlength', 'pattern']">
+				You email must look contain an '@' and be less than 100 chars.
+			</div>
 		</div>
 	</md-input-container>
 

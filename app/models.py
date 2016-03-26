@@ -10,13 +10,10 @@ items = db.Table('item_wishlist',
 
 class Token(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	value = db.Column(db.String(100))
+	value = db.Column(db.String(200), unique=true)
 	expire_at = db.Column(db.DateTime())
 
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	items = db.relationship('Item', secondary=items,
-		backref=db.backref('wishlist', lazy='dynamic'))
-
 
 	def __repr__(self):
 		return {

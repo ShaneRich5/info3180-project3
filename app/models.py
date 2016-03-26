@@ -11,7 +11,7 @@ items = db.Table('item_wishlist',
 class Token(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	value = db.Column(db.String(100))
-	expire_at = db.Column(db.String(15))
+	expire_at = db.Column(db.DateTime())
 
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	items = db.relationship('Item', secondary=items,
@@ -50,6 +50,7 @@ class User(db.Model):
 	last_name = db.Column(db.String(80))
 	email = db.Column(db.String(120), unique=True)
 	password = db.Column(db.String(80))
+	last_login_at = db.Column(db.DateTime())
 	wishlists = db.relationship('Wishlist', backref='User',
 		lazy='dynamic')
 	tokens = db.relationship('Token', backref='User',
@@ -85,8 +86,8 @@ class User(db.Model):
 class Wishlist(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	description = db.Column(db.String(500))
-	created_at = db.Column(db.String(15))
-	modified_at = db.Column(db.String(15))
+	created_at = db.Column(db.DateTime())
+	modified_at = db.Column(db.DateTime())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	items = db.relationship('Item', secondary=items,
 		backref=db.backref('wishlist', lazy='dynamic'))

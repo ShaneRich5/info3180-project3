@@ -1,5 +1,7 @@
 from . import db
 from sqlalchemy.orm import relationship
+from uuid import uuid4
+from datetime import datetime, timedelta
 
 # helper table
 items = db.Table('item_wishlist',
@@ -8,16 +10,22 @@ items = db.Table('item_wishlist',
 	db.Column('status', db.String(20))
 )
 
-class Token(db.Model):
+class AuthToken(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	value = db.Column(db.String(200), unique=True)
+	token = db.Column(db.String(200), unique=True)
+	created_at = db.Column(db.DateTime())
 	expire_at = db.Column(db.DateTime())
 
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+	def __init__(self, days=60):
+		self.token = uuid4().hex
+		self.created_at = datetime.utcnow()
+		self.expire_at = self.created_at + timedelta(days=days)
+
 	def __repr__(self):
 		return {
-			'value': self.value,
+			'token': self.value,
 			'expire_at': self.expire_at
 		}
 
@@ -48,9 +56,10 @@ class User(db.Model):
 	email = db.Column(db.String(120), unique=True)
 	password = db.Column(db.String(80))
 	last_login_at = db.Column(db.DateTime())
+
 	wishlists = db.relationship('Wishlist', backref='User',
 		lazy='dynamic')
-	tokens = db.relationship('Token', backref='User',
+	tokens = db.relationship('AuthToken', backref='User',
 		lazy='dynamic')
 
 	def __init__(self, email, password, first_name, last_name):

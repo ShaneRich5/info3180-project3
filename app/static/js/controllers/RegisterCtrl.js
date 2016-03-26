@@ -2,6 +2,11 @@
 
 (function(angular) {
 
+	angular
+		.module('wishlist')
+		.controller('RegisterCtrl', 
+			['$http', '$log', '$scope', registerCtrl]);
+
 	function registerCtrl($http, $log, $scope) {
 		$log.log('register');
 
@@ -20,9 +25,5 @@
 			$log.log(user);
 		};
 	}
-
-	angular
-		.module('wishlist')
-		.controller('RegisterCtrl', ['$http', '$log', '$scope', registerCtrl]);
 
 })(angular);

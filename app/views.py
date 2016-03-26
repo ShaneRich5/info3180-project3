@@ -1,8 +1,9 @@
 from app import app, db
-from app.models import User, Item
+from app.models import User, Item, AuthToken, Wishlist
 from flask import send_from_directory, request, url_for, redirect, jsonify
 from werkzeug.datastructures import MultiDict
 from forms import RegisterForm, LoginForm
+from uuid import uuid4
 
 @app.route('/')
 @app.route('/home')
@@ -71,13 +72,21 @@ def register():
 		password = data.get('password')
 
 		user = User(email, password, firstName, lastName)
+		token = AuthToken()
+
+		user.tokens.append(token)
 
 		db.session.add(user)
+		db.session.add(token)
+
 		db.session.commit()
 
 		return transform(
 			200, 
-			data=user, 
+			data={
+				'user': user,
+				'token': token.token
+			}, 
 			message='User created successfully'
 		)
 

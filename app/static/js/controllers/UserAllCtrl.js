@@ -1,12 +1,14 @@
 'use strict';
 
 (function(angular) {
-	function controller($log) {
-		$log.log("In loginCrl");
-	}
 
 	angular
 		.module('wishlist')
-		.controller('UserAllCtrl', ['$log', controller]);
+		.controller('UserAllCtrl', 
+			['$log', userAllCtrl]);
+
+	function userAllCtrl($log) {
+		$log.log("In loginCrl");
+	}
 
 })(angular);

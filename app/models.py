@@ -10,7 +10,7 @@ items = db.Table('item_wishlist',
 
 class Token(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	value = db.Column(db.String(200), unique=true)
+	value = db.Column(db.String(200), unique=True)
 	expire_at = db.Column(db.DateTime())
 
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

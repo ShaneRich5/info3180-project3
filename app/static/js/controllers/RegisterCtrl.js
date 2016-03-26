@@ -19,8 +19,6 @@
 
 			$log.log(user);
 		};
-
-		function 
 	}
 
 	angular

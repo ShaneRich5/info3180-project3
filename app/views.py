@@ -20,50 +20,6 @@ def assets(path):
 def logout():
 	return jsonify({'e': 'f'})
 
-@app.route('/api/login', methods=['POST'])
-def login():
-	data = MultiDict(mapping=request.json)
-	inputs = LoginForm(data, csrf_enabled=False)
-
-	if not inputs.validate():
-		return transform(300, message="Invalid inputs")
-	else:
-		data = request.get_json()
-
-		user = db.session.query(User).filter_by(email=data['email']).first()
-
-		if not user:
-			return transform(404, message="Invalid email")
-
-		if not user.password != data['password']:
-			return transform(404, message="Invalid credentials")
-
-		return transform(200, data=user)
-
-@app.route('/api/register', methods=['POST'])
-def register():
-	data = MultiDict(mapping=request.json)	
-	inputs = RegisterForm(data, csrf_enabled=False)
-	
-	if not inputs.validate():
-		return transform(300, message="Invalid inputs")
-	else:
-		# data = request.get_json()
-
-		firstName = data.get('first_name')
-		lastName = data.get('last_name')
-		email = data.get('email')
-		password = data.get('password')
-
-		user = User(email, password, firstName, lastName)
-
-		db.session.add(user)
-		db.session.commit()
-
-		return transform(200, 
-			data=user, 
-			message='User created successfully')
-
 @app.route('/api/users', methods=['GET'])
 def list_users():
 	users = User.query.all()
@@ -81,6 +37,57 @@ def get_user_by_id(id):
 		return transform()
 
 	return transform(200, data=user)
+
+@app.route('/api/login', methods=['POST'])
+def login():
+	data = MultiDict(mapping=request.json)
+	inputs = LoginForm(data, csrf_enabled=False)
+
+	if not inputs.validate():
+		return transform(300, message="Invalid credentials")
+	else:
+		user = db.session.query(User).filter_by(email=data['email']).first()
+
+		if not user:
+			return transform(404, message="Invalid email")
+
+		if not user.password != data['password']:
+			return transform(404, message="Invalid credentials")
+
+		return transform(200, data=user)
+
+
+@app.route('/api/register', methods=['POST'])
+def register():
+	data = MultiDict(mapping=request.json)	
+	inputs = RegisterForm(data, csrf_enabled=False)
+	
+	if not inputs.validate():
+		return transform(300, message="Invalid inputs")
+	else:
+		firstName = data.get('first_name')
+		lastName = data.get('last_name')
+		email = data.get('email')
+		password = data.get('password')
+
+		user = User(email, password, firstName, lastName)
+
+		db.session.add(user)
+		db.session.commit()
+
+		return transform(
+			200, 
+			data=user, 
+			message='User created successfully'
+		)
+
+# Helpers
+def extract_json(request, form=None):
+	data = MultiDict(mapping=request.json)
+	# add form input extraction here
+	
+	return data #, input
+
 
 def transform(status, data=None, message=None):
 	return jsonify({

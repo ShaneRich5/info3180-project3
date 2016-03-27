@@ -1,14 +1,25 @@
 'use strict';
-
-(function(angular){
+		
+(function(angular) {
 
 	angular
 		.module('wishlist')
-		.controller('UserShowCtrl', 
-			['$log', userShowCtrl]);
+		.controller('UserShowCtrl',
+			['UserService', '$log', '$stateParams', '$scope', 'localStorageService', userShowCtrl]);
+		
+	function userShowCtrl(UserService, $log, $stateParams, $scope, localStorageService, $http) {
+		$log.log('In UserShowCtrl ' + $stateParams.userId);
+		$scope.no = $stateParams.userId;
+		$scope.$on('LocalStorageModule.notification.setitem', function() {
+			$scope.test = localStorageService.get('test');
+		});
 
-	function userShowCtrl($log) {
-		$log.log('In UserShowCtrl');
+		$scope.save = function() {
+			$log.log('clicked');
+			localStorageService.set('test', $scope.no);
+		}
+
+		UserService.get();
 	}
 
 })(angular);

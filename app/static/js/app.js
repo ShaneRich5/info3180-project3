@@ -3,13 +3,20 @@
 (function(angular){
 	angular
 		.module('wishlist', [
-			'ngMaterial', 'ui.router'
+			'ngMaterial', 'ui.router', 'LocalStorageModule'
 		])
-		.config(['$stateProvider', '$urlRouterProvider', initConfig])
-		.run([]);
+		.config(['$stateProvider', '$urlRouterProvider', 
+		'localStorageServiceProvider',
+			initConfig])
+		.run(['$rootScope', initRun]);
 
+	function initRun($rootScope) {
 
-	function initConfig($stateProvider, $urlRouterProvider) {
+	}
+
+	function initConfig($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
+
+		localStorageServiceProvider.setNotify(true, true);
 
 		$urlRouterProvider.otherwise('');
 
@@ -29,26 +36,47 @@
 				templateUrl: templatePath('sessions/register'),
 				controller: 'RegisterCtrl'
 			})
-			.state('users.all', {
+			.state('users_all', {
 				url: '/users',
 				templateUrl: templatePath('users/all'),
 				controller: 'UserAllCtrl'
 			})
-			.state('users.show', {
+			.state('users_show', {
 				url: '/users/:userId',
 				templateUrl: templatePath('users/show'),
 				controller: 'UserShowCtrl'
 			})
-			.state('wishlists.all', {
+			.state('wishlists_all', {
 				url: 'users/{userId}/wishlists',
-				templateUrl: templatePath('wishlist/all'),
+				templateUrl: templatePath('wishlists/all'),
 				controller: 'WishlistAllCtrl'
 			})
-			.state('wishlist.show', {
+			.state('wishlists_show', {
 				url: '/users/{userId}/wishlists/{wishlistId}',
-				templateUrl: templatePath('wishlist/show'),
+				templateUrl: templatePath('wishlists/show'),
 				controller: 'WishlistShowCtrl'
-			});
+			})
+			.state('wishlists_new', {
+				url: '/users/{userId}/wishlists/new',
+				templateUrl: templatePath('wishlists/new'),
+				controller: 'WishlistNewCtrl'
+			})
+			.state('items_new', {
+				url: '/users/{userId}/wishlists/{wishlistId}/items/new',
+				templateUrl: templatePath('items/new'),
+				controller: 'ItemNewCtrl'
+			})
+			.state('items_all', {
+				url: '/users/{userId}/wishlists/{wishlistId}/items',
+				templateUrl: templatePath('items/all'),
+				controller: 'ItemAllCtrl'
+			})
+			.state('items_show', {
+				url: '/users/{userId}/wishlists/{wishlistId}/items/{itemId}',
+				templateUrl: templatePath('items/show'),
+				controller: 'ItemShowCtrl'
+			})
+			;
 
 		function templatePath(path) {
 			return 'partials/' + path + '.html';

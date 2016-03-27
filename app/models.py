@@ -25,8 +25,10 @@ class AuthToken(db.Model):
 
 	def __repr__(self):
 		return {
-			'token': self.value,
-			'expire_at': self.expire_at
+			'token': self.token,
+			'expire_at': self.expire_at,
+			'created_at': self.created_at,
+			'user_id': self.user_id
 		}
 
 class Item(db.Model):

@@ -72,23 +72,19 @@ def register():
 		password = data.get('password')
 
 		user = User(email, password, firstName, lastName)
-		token = AuthToken()
+		auth = AuthToken()
 
-		user.tokens.append(token)
+		user.tokens.append(auth)
 
 		db.session.add(user)
-		db.session.add(token)
+		# db.session.add(auth)
 
 		db.session.commit()
 
-		return transform(
-			200, 
-			data={
-				'user': user,
-				'token': token.token
-			}, 
-			message='User created successfully'
-		)
+		response = auth.__repr__()
+		response.add({'user_id'})
+
+		return jsonify()
 
 # Helpers
 def extract_json(request, form=None):
@@ -99,8 +95,11 @@ def extract_json(request, form=None):
 
 
 def transform(status, data=None, message=None):
-	return jsonify({
-		'status': status,
-		'data': data,
-		'message': message
-	})
+	response = {'status': status}
+
+	if data is not None:
+		response['data'] = data
+	if message is not None:
+		response['message'] = message
+
+	return jsonify(response)

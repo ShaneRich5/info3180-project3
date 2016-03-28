@@ -3,7 +3,7 @@
 </h1>
 
 <ul>
-	<li ng-repeat="user in users by $index">
-		{{ user.firstName }}, {{ user.email }}
+	<li ng-repeat="user in users">
+		{{ user.first_name }} {{ user.last_name }}, {{ user.email }}
 	</li>
 </ul>

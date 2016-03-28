@@ -20,12 +20,10 @@
 
 					var data = response.data;
 
-					localStorageService.set('token', data.token);
-					localStorageService.set('expire_at', data.expire_at);
-					localStorageService.set('user_id', data.user_id);
+					Session.save(data);
 
 					$state.go('user_show', {'userId': data.user_id});
-				}
+					}
 			}
 
 			function registerFail(response) {

@@ -23,12 +23,14 @@ def logout():
 
 @app.route('/api/users', methods=['GET'])
 def list_users():
-	users = User.query.all()
+	users = db.session.query(User).all()
 
 	if (users == None):
 		return transform(404, message="Error loading users")
 
-	return transform(200, data=users)
+	user_list = map(lambda x:x.__repr__(), users)
+
+	return jsonify({'users': user_list})
 
 @app.route('/api/users/<id>')
 def get_user_by_id(id):
@@ -84,7 +86,7 @@ def register():
 		response = auth.__repr__()
 		response.add({'user_id'})
 
-		return jsonify()
+		return jsonify(response)
 
 # Helpers
 def extract_json(request, form=None):

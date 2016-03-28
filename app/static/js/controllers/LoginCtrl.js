@@ -5,9 +5,9 @@
 	angular
 		.module('wishlist')
 		.controller('LoginCtrl', 
-			['UserService', 'localStorageService', '$scope', '$log', loginCtrl]);
+			['Session', 'UserService', 'localStorageService', '$scope', '$log', loginCtrl]);
 
-	function loginCtrl(UserService, localStorageService, $scope, $log) {
+	function loginCtrl(Session, UserService, localStorageService, $scope, $log) {
 		$scope.credentials = {};
 
 		$scope.authenticate = function(credentials) {
@@ -16,10 +16,8 @@
 			function loginSuccessful(res) {
 				var data = response.data;
 
-				localStorageService.set('token', data.token);
-				localStorageService.set('expire_at', data.expire_at);
-				localStorageService.set('user_id', data.user_id);
-
+				Session.save(data);
+				
 				$state.go('user_show', {'userId': data.user_id});
 			}
 

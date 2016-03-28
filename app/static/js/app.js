@@ -36,6 +36,10 @@
 				templateUrl: templatePath('sessions/register'),
 				controller: 'RegisterCtrl'
 			})
+			.state('logout', {
+				url: '/logout',
+				controller: 'LogoutCtrl'
+			})
 			.state('users_all', {
 				url: '/users',
 				templateUrl: templatePath('users/all'),
@@ -75,8 +79,7 @@
 				url: '/users/{userId}/wishlists/{wishlistId}/items/{itemId}',
 				templateUrl: templatePath('items/show'),
 				controller: 'ItemShowCtrl'
-			})
-			;
+			});
 
 		function templatePath(path) {
 			return 'partials/' + path + '.html';

@@ -5,19 +5,20 @@
 	angular
 		.module('wishlist')
 		.controller('UserAllCtrl', 
-			['UserService', '$log', userAllCtrl]);
+			['UserService', '$log', '$scope', userAllCtrl]);
 
-	function userAllCtrl(UserService, $log) {
+	function userAllCtrl(UserService, $log, $scope) {
 		$log.log("In UserAllCtrl");
 
 		UserService.all(usersLoaded, failedToLoadUsers);
 
 		function usersLoaded(res) {
-
+			$log.log(res.data);
+			$scope.users = res.data.users;
 		}
 
 		function failedToLoadUsers(res) {
-
+			$log.log('Failed to load users');
 		}
 	}
 

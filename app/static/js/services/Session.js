@@ -35,6 +35,16 @@
 					lastName: localStorageService.get('last_name'),
 					email: localStorageService.get('email')
 				}
+			},
+
+			isLoggedIn: function() {
+				var token = localStorageService.get('token');
+
+				if (null == token) {
+					localstorage.clearAll();
+					return false;
+				}
+				return true;
 			}
 		}
 	}

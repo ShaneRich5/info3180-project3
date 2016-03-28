@@ -1,0 +1,26 @@
+<md-toolbar layout="row" class="md-whiteframe-z1">	
+	<div class="md-toolbar-tools">
+		<h1>Wishlist</h1>
+	</div>
+	<md-menu>
+		<md-button ng-show="user" class="profile-btn" ng-click="openMenu($mdOpenMenu, $event)">
+			{{ user.firstName }}
+		</md-button>
+		<md-menu-content width="4">
+	    	<md-menu-item>
+				<md-button ui-sref="users_show({userId: user.userId})">
+					Profile
+				</md-button>
+	    	</md-menu-item>
+			<md-menu-divider></md-menu-divider>
+	        <md-menu-item>
+				<md-button ui-sref="wishlists_show({userId: user.userId})">
+					Wishlist
+				</md-button>
+        	</md-menu-item>    
+    	</md-menu-content>
+    </md-menu>
+
+	<md-button ui-sref="login" ng-hide="user" class="login-btn">Login</md-button>
+	<md-button ui-sref="register" ng-hide="user" class="register-btn">Register</md-button>
+</md-toolbar>

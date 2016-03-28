@@ -15,9 +15,7 @@
 
 			function loginSuccessful(res) {
 				var data = response.data;
-
 				Session.save(data);
-				
 				$state.go('user_show', {'userId': data.user_id});
 			}
 

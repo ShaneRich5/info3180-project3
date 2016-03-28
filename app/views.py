@@ -37,9 +37,9 @@ def get_user_by_id(id):
 	user = User.query.filter(User.id == id).first()
 
 	if (user == None):
-		return transform()
+		return jsonify({"error": "Could not find user"})
 
-	return transform(200, data=user)
+	return jsonify(user.__repr__())
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -78,13 +78,16 @@ def register():
 
 		user.tokens.append(auth)
 
-		db.session.add(user)
-		# db.session.add(auth)
+		try:
+			db.session.add(user)
+			# db.session.add(auth)
 
-		db.session.commit()
+			db.session.commit()
+		except IntegrityError as e:
+			return jsonify({"error": "email already taken"})
 
 		response = auth.__repr__()
-		response.add({'user_id'})
+		response.update({'user_id': user.id})
 
 		return jsonify(response)
 

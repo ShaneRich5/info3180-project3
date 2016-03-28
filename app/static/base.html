@@ -8,14 +8,7 @@
 <body ng-app="wishlist" layout="column">
 	
 	<!-- <md-toolbar layout="row"> -->
-	<md-toolbar layout="row" class="md-whiteframe-z1">
-		
-		<div class="md-toolbar-tools">
-			<h1>Wishlist</h1>
-		</div>
-		<md-button ui-sref="login">Login</md-button>
-		<md-button ui-sref="register">Register</md-button>
-	</md-toolbar>
+	<navbar></navbar>
 
 	<div flex layout="row">
 		<!-- Container #3 -->
@@ -46,6 +39,9 @@
 	<!-- services -->
 	<script type="text/javascript" src="/js/services/Session.js"></script>
 	<script type="text/javascript" src="/js/services/UserService.js"></script>
+
+	<!-- directive -->
+	<script type="text/javascript" src="/js/directives/navbar.js"></script>
 
 	<!-- controllers -->
 	<script type="text/javascript" src="/js/controllers/HomeCtrl.js"></script>

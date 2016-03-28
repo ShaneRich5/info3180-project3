@@ -5,28 +5,30 @@
 	angular
 		.module('wishlist')
 		.controller('RegisterCtrl', 
-			['UserService', '$state', '$http', '$log', '$scope', 'localStorageService', 
+			['Session', 'UserService', '$state', '$http', '$log', '$scope', 
+			'localStorageService', 
 				registerCtrl]);
 
-	function registerCtrl(UserService, $state, $http, $log, $scope, localStorageService) {
+	function registerCtrl(Session, UserService, $state, $http, $log, $scope, 
+		localStorageService) {
+		
 		$scope.user = {};
+		
 
 		$scope.createUser = function(user) {
 			UserService.register(user, registerSuccess, registerFail);
 
 			function registerSuccess(response) {
-				if (response.status >= 200 && response.status < 300) {
-					$log.log(response.data);
+				$log.log('RegisterCtrlefe');
+				$log.log(response.data);
 
-					var data = response.data;
-
-					Session.save(data);
-
-					$state.go('user_show', {'userId': data.user_id});
-					}
+				var data = response.data;
+				Session.save(data);
+				$state.go('users_show', {'userId': data.user_id});
 			}
 
 			function registerFail(response) {
+				$log.log('RegisterCtrlefefefefef');
 				$log.log(response);
 			}
 

@@ -16,3 +16,7 @@ class LoginForm(Form):
 class WishlistForm(Form):
 	name = TextField('name', validators=[Required()])
 	description = TextAreaField('description')
+
+class ItemForm(Form):
+	name = TextField('name', validators=[Required()])
+	description = TextAreaField('description')

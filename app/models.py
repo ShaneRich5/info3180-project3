@@ -44,17 +44,19 @@ class Item(db.Model):
 	thumbnail = db.Column(db.String(500))
 	wishlist_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-	def __init__(self, name, thumbnail, user_id, description=None):
+	def __init__(self, name, description=None):
 		self.name = name
-		self.description = description
-		self.thumbnail = thumbnail
-		self.user_id = user_id
+
+		if description is not None:
+			self.description = description
 
 	def __repr__(self):
 		return {
+			'id': sself.id,
 			'name': self.name,
 			'description': self.description,
-			'thumbnail': self.thumbnail
+			'thumbnail': self.thumbnail,
+			'wishlist_id': self.wishlist_id
 		}
 
 class User(db.Model):
@@ -113,8 +115,6 @@ class Wishlist(db.Model):
 		self.name = name
 		if description is not None:
 			self.description = description
-		else:
-			self.description = ''
 		self.created_at = datetime.utcnow()
 		self.modified_at = datetime.utcnow()
 

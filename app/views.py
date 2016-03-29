@@ -21,6 +21,50 @@ def assets(path):
 def logout():
 	return jsonify({'e': 'f'})
 
+
+# ==============================================================
+# 						Item Routes
+# ==============================================================
+@app.route('/api/items', methods=['GET'])
+def list_items():
+	items = db.session.query(Item).all()
+	item_list = map(lambda x:x__repr__(), items)
+	return jsonify({'items': item_list})
+
+@app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items', methods=['GET'])
+def get_wishlist_items(user_id, wishlist_name):
+	wishlist = db.session.query(Wishlist).filter(name=wishlist_name, user_id=user_id).first()
+	items = db.session.query(Item).filter(wishlist_id=wishlist.id,).all()
+	item_list = map(lambda x:x__repr__(), items)
+	return jsonify({'items': item_list})
+
+@app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items', methods=['POST'])
+def save_wishlist_item(user_id, wishlist_name):
+	token = request.headers.get('auth-token')
+	data = MultiDict(mapping=request.json)
+	inputs = ItemForm(data, csrf_enabled=False)
+
+	if not inputs.validate():
+		return jsonify({'error': 'invalid inputs'})
+
+	wishlist = db.session.query(Wishlist).filter(user_id=user_id, name=wishlist_name).first()
+	
+	name = data['name']
+	description = data['description']
+
+	item = Item(name, description=description)
+
+	wishlist.items.append(item)
+
+	db.session.add(item)
+	db.session.commit()
+
+	return jsonify(item.__repr__())
+
+
+# ==============================================================
+# 						User Routes
+# ==============================================================
 @app.route('/api/users', methods=['GET'])
 def list_users():
 	users = db.session.query(User).all()
@@ -41,6 +85,10 @@ def get_user_by_id(id):
 
 	return jsonify(user.__repr__())
 
+
+# ==============================================================
+# 						Wishlist Routes
+# ==============================================================
 @app.route('/api/users/<user_id>/wishlists', methods=['GET'])
 def get_all_wishlist(user_id):
 	wishlists = db.session.query(Wishlist).filter_by(user_id=user_id).all()
@@ -54,7 +102,6 @@ def get_all_wishlist(user_id):
 def save_wishlist(user_id):
 	token = request.headers.get('auth-token')
 
-	print token
 	user = db.session.query(User).filter_by(id=user_id).first()
 	auth = db.session.query(AuthToken).filter_by(token=token).first()
 
@@ -81,7 +128,6 @@ def save_wishlist(user_id):
 	db.session.commit()
 
 	return jsonify(wishlist.__repr__())
-
 
 @app.route('/api/login', methods=['POST'])
 def login():

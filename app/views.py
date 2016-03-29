@@ -2,7 +2,7 @@ from app import app, db
 from app.models import User, Item, AuthToken, Wishlist
 from flask import send_from_directory, request, url_for, redirect, jsonify
 from werkzeug.datastructures import MultiDict
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, WishlistForm
 from uuid import uuid4
 
 @app.route('/')
@@ -41,23 +41,65 @@ def get_user_by_id(id):
 
 	return jsonify(user.__repr__())
 
+@app.route('/api/users/<user_id>/wishlists', methods=['GET'])
+def get_all_wishlist(user_id):
+	wishlists = db.session.query(Wishlist).filter_by(user_id=user_id).all()
+	wishlist_list = map(lambda x:x.__repr__(), wishlists)
+	return jsonify({
+		'wishlists': wishlist_list,
+		'count': len(wishlists)
+	})
+
+@app.route('/api/users/<user_id>/wishlists', methods=['POST'])
+def save_wishlist(user_id):
+	token = request.headers.get('auth-token')
+
+	print token
+	user = db.session.query(User).filter_by(id=user_id).first()
+	auth = db.session.query(AuthToken).filter_by(token=token).first()
+
+	# print auth
+
+	if auth.user_id != user.id:
+		return jsonify({'error': 'token not found'})
+
+	data = MultiDict(mapping=request.json)
+
+	inputs = WishlistForm(data, csrf_enabled=False)
+
+	if not inputs.validate():
+		return jsonify({'error': 'missing required fields'})
+
+	name = data['name']
+	description = data['description']
+
+	wishlist = Wishlist(name, description)
+
+	user.wishlists.append(wishlist)
+
+	db.session.add(wishlist)
+	db.session.commit()
+
+	return jsonify(wishlist.__repr__())
+
+
 @app.route('/api/login', methods=['POST'])
 def login():
 	data = MultiDict(mapping=request.json)
 	inputs = LoginForm(data, csrf_enabled=False)
 
 	if not inputs.validate():
-		return transform(300, message="Invalid credentials")
-	else:
-		user = db.session.query(User).filter_by(email=data['email']).first()
+		return jsonify({'error': 'Invalid credentials'})
+	
+	user = db.session.query(User).filter_by(email=data['email']).first()
 
-		if not user:
-			return transform(404, message="Invalid email")
+	if not user:
+		return jsonify({'error': 'invalid email'})
 
-		if not user.password != data['password']:
-			return transform(404, message="Invalid credentials")
+	if not user.password != data['password']:
+		return jsonify({'error': 'invalid credentials'})
 
-		return transform(200, data=user)
+	return jsonify({'user': user.__repr__()})
 
 
 @app.route('/api/register', methods=['POST'])
@@ -87,7 +129,11 @@ def register():
 			return jsonify({"error": "email already taken"})
 
 		response = auth.__repr__()
-		response.update({'user_id': user.id})
+		response.update({
+			'user_id': user.id,
+			'first_name': user.first_name,
+			'last_name': user.last_name
+		})
 
 		return jsonify(response)
 

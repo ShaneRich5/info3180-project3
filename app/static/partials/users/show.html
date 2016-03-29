@@ -1,11 +1,5 @@
-<h1>Show user</h1>
+<h1>{{ user.name }}</h1>
 
-{{ user.name }}
+<p>{{ user.bio }}</p>
 
-
-<input type="text" ng-model="no">
-<button ng-click="save()">Submit</button>
-
-<p>User #: {{ no }}</p>
-
-<p>Test Variable: {{ test }}</p>
+<button ng-click="createNewWishlist()">Create A Wishlist</button>

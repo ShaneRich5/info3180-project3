@@ -4,9 +4,9 @@
 	angular
 		.module('wishlist')
 		.directive('navbar', 
-			['$state', 'localStorageService', 'Session', '$log', navbarFn]);
+			['$state', 'Session', '$log', navbarFn]);
 
-	function navbarFn($state, localStorageService, Session, $log) {
+	function navbarFn($state, Session, $log) {
 		return {
 			scope: {},
 			restrict: 'AE',
@@ -36,9 +36,7 @@
 						return;
 					}
 					scope.user = Session.getUser();
-					$log.log(scope.user);
 				}
-
 			}
 		}
 	}

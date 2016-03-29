@@ -5,10 +5,11 @@
 	angular
 		.module('wishlist')
 		.controller('WishlistShowCtrl', 
-			['$log', wishlistShowCtrl]);
+			['$stateParams', '$log', wishlistShowCtrl]);
 
-	function wishlistShowCtrl($log) {
-		$log.log('In WishlistShowCtrl');
+	function wishlistShowCtrl($stateParams, $log) {
+		$log.log($stateParams);
+		
 	}
 
 })(angular);

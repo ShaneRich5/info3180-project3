@@ -23,6 +23,12 @@ class AuthToken(db.Model):
 		self.created_at = datetime.utcnow()
 		self.expire_at = self.created_at + timedelta(days=days)
 
+	def get_token():
+		return self.token
+
+	def get_user_id():
+		return self.user_id
+
 	def __repr__(self):
 		return {
 			'token': self.token,
@@ -93,22 +99,31 @@ class User(db.Model):
 
 class Wishlist(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(30))
 	description = db.Column(db.String(500))
 	created_at = db.Column(db.DateTime())
 	modified_at = db.Column(db.DateTime())
+
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 	items = db.relationship('Item', secondary=items,
 		backref=db.backref('wishlist', lazy='dynamic'))
 
-	def __init__(self, description, created_at, modified_at):
-		self.description = description
-		self.created_at = created_at
-		self.modified_at = modified_at
+	def __init__(self, name, description=None):
+		self.name = name
+		if description is not None:
+			self.description = description
+		else:
+			self.description = ''
+		self.created_at = datetime.utcnow()
+		self.modified_at = datetime.utcnow()
 
 	def __repr__(self):
 		return {
+			'id': self.id,
+			'name': self.name,
 			'description': self.description,
+			'user_id': self.user_id,
 			'created_at': self.created_at,
 			'modified_at': self.modified_at
 		}
-

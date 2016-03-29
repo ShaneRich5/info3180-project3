@@ -14,7 +14,6 @@
 				localStorageService.set('user_id', data.user_id);
 				localStorageService.set('first_name', data.first_name);
 				localStorageService.set('last_name', data.last_name);
-				localStorageService.get('email', data.email);
 			},
 
 			clear: function() {
@@ -35,16 +34,6 @@
 					lastName: localStorageService.get('last_name'),
 					email: localStorageService.get('email')
 				}
-			},
-
-			isLoggedIn: function() {
-				var token = localStorageService.get('token');
-
-				if (null == token) {
-					localstorage.clearAll();
-					return false;
-				}
-				return true;
 			}
 		}
 	}

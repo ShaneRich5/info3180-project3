@@ -5,21 +5,28 @@
 	angular
 		.module('wishlist')
 		.controller('UserShowCtrl',
-			['UserService', '$log', '$stateParams', '$scope', 'localStorageService', userShowCtrl]);
+			['$state', 'UserService', '$log', '$stateParams', '$scope', '$http', 
+			'Session', userShowCtrl]);
 		
-	function userShowCtrl(UserService, $log, $stateParams, $scope, localStorageService, $http) {
-		$log.log('In UserShowCtrl ' + $stateParams.userId);
-		$scope.no = $stateParams.userId;
-		$scope.$on('LocalStorageModule.notification.setitem', function() {
-			$scope.test = localStorageService.get('test');
-		});
+	function userShowCtrl($state, UserService, $log, $stateParams, $scope, $http,
+		Session) {
 
-		$scope.save = function() {
-			$log.log('clicked');
-			localStorageService.set('test', $scope.no);
+		var id = $stateParams.userId;
+		$scope.user = {}
+
+		UserService.get(id, userDetailsLoaded, userLoadFailed);
+
+		$scope.createNewWishlist = function() {
+			$state.go('wishlists_new');
 		}
 
-		UserService.get();
+		function userDetailsLoaded(res) {
+			$scope.user = res.data.user;
+		}
+		
+		function userLoadFailed(res) {
+			$log.log("Failed to load user");
+		}
 	}
 
 })(angular);

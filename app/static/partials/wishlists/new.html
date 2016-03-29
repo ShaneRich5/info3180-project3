@@ -1,1 +1,18 @@
-<h1>New Wishlist</h1>
+<h1>New Wishlist: {{ wishlist.name }}</h1>
+<div>
+	<md-input-container flex-gt-sm>
+		<label>Name</label>
+		<input name="name" ng-model="wishlist.name" required md-maxlength="30" md-minlength="1">
+		<div ng-messages="wishlistForm.name.$error" role="alert" multiple>
+			<div ng-message="required" class="my-message">You must give your wishlist a name</div>
+			<div ng-message="md-maxlength" class="my-message">The wishlist name should be less than 30 characters</div>
+			<div ng-message="md-minlength" class="my-message">The wishlist name should be at least 1 character</div>
+		</div>
+	</md-input-container>
+	<md-input-container class="md-block">
+		<label>Description</label>
+		<textarea ng-model="wishlist.description" md-maxlength="200" rows="5" md-select-on-focus></textarea>
+	</md-input-container>
+	<small>{{ error }}</small>
+	<md-button ng-click="saveWishlist(wishlist)" class="md-raised" ng-disabled="wishlist.name.length < 0">Save</md-button>
+</div>

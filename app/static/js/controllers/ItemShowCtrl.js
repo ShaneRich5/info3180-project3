@@ -4,10 +4,15 @@
 
 	angular
 		.module('wishlist')
-		.controller('ItemShowCtrl', ['$log', itemShowCtrl]);
+		.controller('ItemShowCtrl', ['ItemService', '$stateParams', '$state', '$log', itemShowCtrl]);
 		
-	function itemShowCtrl($log) {
-		$log.log('In ItemShowCtrl');
+	function itemShowCtrl(ItemService, $stateParams, $state, $log) {
+		var userId = $stateParams.userId,
+			wishlistName = $stateParams.wishlistName,
+			itemId = $stateParams.itemId;
+
+// /users/{userId}/wishlists/{wishlistName}/items/{itemId}
+		ItemService.getWishlistItemById()
 	}
 
 })(angular);

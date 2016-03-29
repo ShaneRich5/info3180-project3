@@ -3,18 +3,18 @@
 		<h1>Wishlist</h1>
 	</div>
 	<md-menu>
-		<md-button ng-show="user" class="profile-btn" ng-click="openMenu($mdOpenMenu, $event)">
+		<md-button ng-show="user" aria-label="name" class="profile-btn" ng-click="openMenu($mdOpenMenu, $event)">
 			{{ user.firstName }}
 		</md-button>
 		<md-menu-content width="4">
 	    	<md-menu-item>
-				<md-button ui-sref="users_show({userId: user.userId})">
+				<md-button aria-label="profile" ui-sref="users_show({userId: user.userId})">
 					Profile
 				</md-button>
 	    	</md-menu-item>
 			<md-menu-divider></md-menu-divider>
 	        <md-menu-item>
-				<md-button ui-sref="wishlists_all({userId: user.userId})">
+				<md-button aria-label="wishlists" ui-sref="wishlists_all({userId: user.userId})">
 					Wishlists
 				</md-button>
         	</md-menu-item>    

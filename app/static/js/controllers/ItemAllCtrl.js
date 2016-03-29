@@ -5,10 +5,20 @@
 	angular
 		.module('wishlist')
 		.controller('ItemAllCtrl', 
-			['$log', itemAllCtrl]);
+			['$scope', '$stateParms', '$state', '$log', itemAllCtrl]);
 
-	function itemAllCtrl($log) {
-		$log.log("in ItemAllCtrl");
+	function itemAllCtrl($scope, $stateParams, $state, $log) {
+		var userId = $stateParams.userId,
+			wishlistName = $stateParams.wishlistName,
+			itemNo = $stateParams.itemNo;
+
+		$scope.goToNewItemForm = function() {
+			$state.go('items_new', {
+				userId: userId,
+				wishlistName: wishlistName,
+				itemNo: itemNo
+			});
+		};
 	}
 
 })(angular);

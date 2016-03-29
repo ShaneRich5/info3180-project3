@@ -31,12 +31,25 @@ def list_items():
 	item_list = map(lambda x:x__repr__(), items)
 	return jsonify({'items': item_list})
 
+@app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items/<item_no>', methods=['GET'])
+def get_wishlist_item_by_index(user_id, wishlist_name, item_no):
+	wishlist = db.session.query(Wishlist).filter_by(name=wishlist_name, user_id=user_id).first()
+	items = db.session.query(Item).filter_by(wishlist_id=wishlist.id,).all()
+	return jsonify({
+		'item': items[0]
+	})
+	item_list = map(lambda x:x__repr__(), items)
+
+
 @app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items', methods=['GET'])
 def get_wishlist_items(user_id, wishlist_name):
-	wishlist = db.session.query(Wishlist).filter(name=wishlist_name, user_id=user_id).first()
-	items = db.session.query(Item).filter(wishlist_id=wishlist.id,).all()
+	wishlist = db.session.query(Wishlist).filter_by(name=wishlist_name, user_id=user_id).first()
+	items = db.session.query(Item).filter_by(wishlist_id=wishlist.id,).all()
 	item_list = map(lambda x:x__repr__(), items)
-	return jsonify({'items': item_list})
+	return jsonify({
+		'items': item_list,
+		'count': len(items)
+	})
 
 @app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items', methods=['POST'])
 def save_wishlist_item(user_id, wishlist_name):
@@ -70,7 +83,7 @@ def list_users():
 	users = db.session.query(User).all()
 
 	if (users == None):
-		return transform(404, message="Error loading users")
+		return jsonify({'error': 'error loading users'})
 
 	user_list = map(lambda x:x.__repr__(), users)
 
@@ -89,6 +102,18 @@ def get_user_by_id(id):
 # ==============================================================
 # 						Wishlist Routes
 # ==============================================================
+@app.route('/api/users/<user_id>/wishlists/<wishlist_name>', methods=['GET'])
+def get_wishlist_by_name(user_id, wishlist_name):
+	wishlist = db.session.query(Wishlist).filter_by(name=wishlist_name, user_id=user_id).first()
+	items = db.session.query(Item).filter_by(wishlist_id=wishlist.id).all()
+	item_list = map(lambda x:x.__repr__(), items)
+	
+	return jsonify({
+		'wishlist': wishlist.__repr__(),
+		'items': item_list,
+		'item_count': len(items)
+	})
+
 @app.route('/api/users/<user_id>/wishlists', methods=['GET'])
 def get_all_wishlist(user_id):
 	wishlists = db.session.query(Wishlist).filter_by(user_id=user_id).all()

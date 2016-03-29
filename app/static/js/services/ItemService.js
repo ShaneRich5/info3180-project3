@@ -20,18 +20,20 @@
 			saveItem: function(config, data, successFn, failFn) {
 				var token = config.token;
 
-				data['user_id'] = userId;
+				data['user_id'] = data.userId;
 
-				return $http({
-					method: 'POST',
-					url: '/api/items',
-					headers: {
-						'Content-Type': 'application/json',
-						'auth-token': token
-					},
-					data: data
-				}).then(successFn, failFn)
+				// return $http({
+				// 	method: 'POST',
+				// 	url: '/api/users/' + data.userId + '/wishlists/' + wishlistName + '/items',
+				// 	headers: {
+				// 		'Content-Type': 'application/json',
+				// 		'auth-token': token
+				// 	},
+				// 	data: data
+				// }).then(successFn, failFn)
 			}
+
+			// getWishlistItemById: function
 		}
 	}
 

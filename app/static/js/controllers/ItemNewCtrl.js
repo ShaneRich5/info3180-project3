@@ -13,12 +13,12 @@
 
 		$scope.saveItem = function(item) {
 			var config = {
-				'token': auth.token;
+				'token': auth.token
 			}
 
 			item['user_id'] = user.userId;
 			item['wishlist_id'] = wishlistId;
-
+			
 			ItemService.saveItem(config, item, itemSavedSuccess, itemSaveFailed)
 		}
 

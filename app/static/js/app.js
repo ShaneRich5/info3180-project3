@@ -93,7 +93,7 @@
 				controller: 'ItemAllCtrl'
 			})
 			.state('items_show', {
-				url: '/users/{userId}/wishlists/{wishlistId}/items/{itemId}',
+				url: '/users/{userId}/wishlists/{wishlistName}/items/{itemNo}',
 				templateUrl: templatePath('items/show'),
 				controller: 'ItemShowCtrl'
 			});

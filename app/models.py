@@ -42,7 +42,6 @@ class Item(db.Model):
 	name = db.Column(db.String(80))
 	description = db.Column(db.String(500))
 	thumbnail = db.Column(db.String(500))
-	wishlist_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 	def __init__(self, name, description=None):
 		self.name = name
@@ -52,11 +51,10 @@ class Item(db.Model):
 
 	def __repr__(self):
 		return {
-			'id': sself.id,
+			'id': self.id,
 			'name': self.name,
 			'description': self.description,
-			'thumbnail': self.thumbnail,
-			'wishlist_id': self.wishlist_id
+			'thumbnail': self.thumbnail
 		}
 
 class User(db.Model):

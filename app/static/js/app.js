@@ -15,13 +15,6 @@
 		$rootScope.$on('$stateChangeStart', function(event, toState) {
 			if (toState.data != undefined && !angular.isFunction(toState.data.auth)) 
 				return;
-			
-			// var isAuthenticated = toState.data.auth(Session.getToken);
-
-			// if (!isAuthenticated) {
-			// 	event.preventDefault();
-			// 	$state.go('home', {notify: false});
-			// }
 		});
 	}
 
@@ -83,7 +76,7 @@
 				controller: 'WishlistShowCtrl'
 			})
 			.state('items_new', {
-				url: '/users/{userId}/wishlists/{wishlistId}/items/new',
+				url: '/users/{userId}/wishlists/{wishlistName}/items/new',
 				templateUrl: templatePath('items/new'),
 				controller: 'ItemNewCtrl'
 			})

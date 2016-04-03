@@ -4,10 +4,9 @@
 	angular
 		.module('wishlist')
 		.directive('sidebar', 
-			['$state', '$log', sidebarFn]);
+			['$log', 'Session', 'WishlistService', '$state', sidebarFn]);
 
-	function sidebarFn($state, $log) {
-
+	function sidebarFn($log, Session, WishlistService, $state) {
 		return {
 			scope: {},
 			restrict: 'AE',
@@ -17,14 +16,21 @@
 
 			},
 			link: function(scope, elem, attr) {
-				scope.wishlists = [
-					{
-						name: 'First'
-					},
-					{
-						name: 'Second'
-					}
-				];
+				var user = Session.getUser(),
+					auth = Session.getToken();
+
+				// WishlistService.all(user.userId,
+				// 	wishlistLoadSuccess, wishlistLoadFail);
+
+				scope.wishlists = {};
+
+				function wishlistLoadSuccess(response) {
+					scope.wishlists = response.wishlists;
+				}
+
+				function wishlistLoadFail(response) {
+
+				}
 			}
 		}
 	}

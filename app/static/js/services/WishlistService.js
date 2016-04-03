@@ -14,8 +14,8 @@
 			},
 
 			get: function(userId, wishlistName, successFn, failFn) {
-				// return $http.get('/api/users/' + userId + '/wishlists/' + wishlistName)
-				// 	.then(successFn, failFn);
+				return $http.get('/api/users/' + userId + '/wishlists/' + wishlistName)
+					.then(successFn, failFn);
 			},
 
 			create: function(config, wishlistData, successFn, failFn) {

@@ -2,6 +2,14 @@
 
 <p>{{ wishlist.description }}</p>
 
+<div layout="row">
+	<md-input-container>
+		<label>Url</label>
+		<input ng-model="url">
+	</md-input-container>
+	<md-button ng-click="queryUrl(url)">Go!</md-button>
+</div>
+
 <md-list ng-cloak>
 	<md-subheader class="md-no-sticky">Check</md-subheader>
 	<md-list-item ng-repeat="item in items" ng-click="goToItem(item.name, $event)" 
@@ -10,6 +18,16 @@
 			<h3>{{ item.name }}</h3>
 			<p>{{ item.description }}</p>
 		</div>
-		<md-checkbox class="md-secondary" ng-model="item.selected"></md-checkbox>
 	</md-list-item>
 </md-list>
+
+<div class="lock-size" layout="row" layout-align="center center">
+	<md-fab-speed-dial>
+		<md-fab-trigger>
+			<md-button aria-label="add" class="md-fab md-warn" ng-click="addNewItem()">
+				<md-icon md-svg-src="img/icons/ic_add_white_24px.svg"></md-icon>
+			</md-button>
+		</md-fab-trigger>
+		
+	</md-fab-speed-dial>
+</div><!-- end of div ./lock-size -->

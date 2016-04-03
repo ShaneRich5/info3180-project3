@@ -2,7 +2,7 @@
 
 <form>
 	<md-input-container flex-gt-md>
-		<label>Email</label>
+		<label>Email {{ user.email }}</label>
 		<input type="text" ng-model="user.email" required
 			ng-pattern="/^.+@.+\..+$/" maxlength="100"/>
 		<div class="hint" ng-show="showHints">How can we reach you?</div>
@@ -15,9 +15,11 @@
 
 	<md-input-container flex-gt-lg>
 		<label>Password</label>
-		<input type="password" ng-model="password" required>
+		<input type="password" ng-model="user.password" required>
 		<div ng-messages="userForm.username.$error">
 			<div ng-message="required">This is required</div>
 		</div>
 	</md-input-container>
+
+	<md-button on-click="attemptLogin(user)" raised>Login</md-button>
 </form>

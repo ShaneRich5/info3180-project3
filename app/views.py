@@ -2,9 +2,16 @@ from app import app, db
 from app.models import User, Item, AuthToken, Wishlist
 from flask import send_from_directory, request, url_for, redirect, jsonify
 from werkzeug.datastructures import MultiDict
-from forms import RegisterForm, LoginForm, WishlistForm
+from forms import RegisterForm, LoginForm, WishlistForm, ItemForm
 from uuid import uuid4
 
+# used to retrieve thumbnails
+import requests
+from bs4 import BeautifulSoup
+
+# ==============================================================
+# 						General Pages Routes
+# ==============================================================
 @app.route('/')
 @app.route('/home')
 def base():
@@ -21,7 +28,6 @@ def assets(path):
 def logout():
 	return jsonify({'e': 'f'})
 
-
 # ==============================================================
 # 						Item Routes
 # ==============================================================
@@ -35,45 +41,75 @@ def list_items():
 def get_wishlist_item_by_index(user_id, wishlist_name, item_no):
 	wishlist = db.session.query(Wishlist).filter_by(name=wishlist_name, user_id=user_id).first()
 	items = db.session.query(Item).filter_by(wishlist_id=wishlist.id,).all()
-	return jsonify({
-		'item': items[0]
-	})
-	item_list = map(lambda x:x__repr__(), items)
-
+	
+	return jsonify({'item': items[0]})
 
 @app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items', methods=['GET'])
 def get_wishlist_items(user_id, wishlist_name):
 	wishlist = db.session.query(Wishlist).filter_by(name=wishlist_name, user_id=user_id).first()
-	items = db.session.query(Item).filter_by(wishlist_id=wishlist.id,).all()
-	item_list = map(lambda x:x__repr__(), items)
+	item_list = map(lambda x:x.__repr__(), wishlist.items)
+	
 	return jsonify({
 		'items': item_list,
-		'count': len(items)
+		'count': len(wishlist.items)
 	})
 
 @app.route('/api/users/<user_id>/wishlists/<wishlist_name>/items', methods=['POST'])
 def save_wishlist_item(user_id, wishlist_name):
 	token = request.headers.get('auth-token')
+
+	if token is None:
+		return jsonify({'error': 'token missing'})
+
+	auth = db.session.query(AuthToken).filter_by(token=token).first()
+	user = db.session.query(User).filter_by(id=auth.user_id).first()
+
+	if auth is None or user is None:
+		return jsonify({'error': 'credential mismatch'})
+
 	data = MultiDict(mapping=request.json)
 	inputs = ItemForm(data, csrf_enabled=False)
 
-	if not inputs.validate():
-		return jsonify({'error': 'invalid inputs'})
+	# if not inputs.validate():
+	# 	return jsonify({'error': 'invalid inputs'})
 
-	wishlist = db.session.query(Wishlist).filter(user_id=user_id, name=wishlist_name).first()
+	url = data['url']
+	html_document = requests.get(url)
+	soup = BeautifulSoup(html_document.text)
+	images = soup.find_all('img')
+	thumbnails = []
 	
-	name = data['name']
-	description = data['description']
+	for image in images:
+		src = image.get('src')
+		if not 'gif' in src and not 'png' in src and not 'sprite' in src:
+			thumbnails.append(src)
 
-	item = Item(name, description=description)
+	print images
 
-	wishlist.items.append(item)
+	return jsonify({'data': thumbnails})
 
-	db.session.add(item)
-	db.session.commit()
+	# for val in user.wishlists:
+	# 	print  val.user_id == user_id
+	# 	if val.name == wishlist_name and val.user_id == int(user_id):
+	# 		print "here"
+	# 		wishlist = val
 
-	return jsonify(item.__repr__())
+	# if wishlist is None:
+	# 	return jsonify({'error': 'error finding wishlist'})
 
+	# name = data['name']
+	# description = data['description']
+
+	# item = Item(name, description=description)
+
+	# wishlist.items.append(item)
+
+	# db.session.add(item)
+	# db.session.commit()
+
+	# return jsonify({
+	# 	'item': item.__repr__()
+	# })
 
 # ==============================================================
 # 						User Routes
@@ -98,14 +134,16 @@ def get_user_by_id(id):
 
 	return jsonify(user.__repr__())
 
-
 # ==============================================================
 # 						Wishlist Routes
 # ==============================================================
 @app.route('/api/users/<user_id>/wishlists/<wishlist_name>', methods=['GET'])
 def get_wishlist_by_name(user_id, wishlist_name):
 	wishlist = db.session.query(Wishlist).filter_by(name=wishlist_name, user_id=user_id).first()
-	items = db.session.query(Item).filter_by(wishlist_id=wishlist.id).all()
+	items = wishlist.items
+
+	# db.session.query(Item).filter_by(wishlist_id=wishlist.id).all()
+
 	item_list = map(lambda x:x.__repr__(), items)
 	
 	return jsonify({
@@ -118,6 +156,7 @@ def get_wishlist_by_name(user_id, wishlist_name):
 def get_all_wishlist(user_id):
 	wishlists = db.session.query(Wishlist).filter_by(user_id=user_id).all()
 	wishlist_list = map(lambda x:x.__repr__(), wishlists)
+	
 	return jsonify({
 		'wishlists': wishlist_list,
 		'count': len(wishlists)
@@ -129,8 +168,6 @@ def save_wishlist(user_id):
 
 	user = db.session.query(User).filter_by(id=user_id).first()
 	auth = db.session.query(AuthToken).filter_by(token=token).first()
-
-	# print auth
 
 	if auth.user_id != user.id:
 		return jsonify({'error': 'token not found'})

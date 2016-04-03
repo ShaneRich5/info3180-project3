@@ -9,25 +9,36 @@
 	function itemNewCtrl($state, $stateParams, $scope, Session, ItemService, $log){
 		var user = Session.getUser(),
 			auth = Session.getToken(),
-			wishlistId = $stateParams.wishlistId;
+			wishlistName = $stateParams.wishlistName;
 
 		$scope.saveItem = function(item) {
+			if (undefined == item) {
+				return;
+			}
+
 			var config = {
-				'token': auth.token
+				token: auth.token,
+				wishlistName: wishlistName,
+				userId: user.userId
 			}
 
 			item['user_id'] = user.userId;
-			item['wishlist_id'] = wishlistId;
 			
-			ItemService.saveItem(config, item, itemSavedSuccess, itemSaveFailed)
+			item['wishlist_name'] = wishlistName;
+			
+			ItemService.save(config, item, 
+				itemSaveSuccess, itemSaveFail);
+
 		}
 
-		function itemSavedSuccess(response) {
+		function itemSaveSuccess(response) {
 			var data = response.data;
 
+			$log.log(response);
+
 			$state.go('wishlists_show', {
-				userId: user.userId,
-				wishlistId: wishlistId
+				'userId': user.userId,
+				'wishlistName': wishlistName
 			});
 		}
 

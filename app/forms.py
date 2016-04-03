@@ -18,5 +18,5 @@ class WishlistForm(Form):
 	description = TextAreaField('description')
 
 class ItemForm(Form):
-	name = TextField('name', validators=[Required()])
-	description = TextAreaField('description')
+	name = TextField('url', validators=[Required()])
+	# notes = TextAreaField('notes')
